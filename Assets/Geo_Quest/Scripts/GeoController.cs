@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GeoController : MonoBehaviour
 {
     public int myvariable = 0;
-    private Rigidbody2D rb; 
-
+    private Rigidbody2D rb;
+    public float speed = 5;
+    public string nextlevel = "scene_2";
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +33,27 @@ public class GeoController : MonoBehaviour
         */
 
         float xInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2 (xInput, rb.velocity.y);
+        rb.velocity = new Vector2(xInput * speed, rb.velocity.y);
+    }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (collision.tag)
+        {
+            case "Death":
+                {
 
+                    string thislevel = SceneManager.GetActiveScene().name;
+                    SceneManager.LoadScene(thislevel);
+                    break;
+
+                }
+            case "Finish":
+                {
+                    SceneManager.LoadScene(nextlevel); 
+                    break;
+                }
+        }
     }
 }
+                
